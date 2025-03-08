@@ -4,36 +4,93 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ナンバー推理ゲーム</title>
+</head>
+<body>
+    <h1>ナンバー推理ゲーム</h1>
+    <p>ルール: 隠された数字を推理して当てよう！</p>
 
-    <!-- Firebase SDK の読み込み -->
+    <!-- 数字を入力するフォーム -->
+    <label for="guess">推理する数字を入力:</label>
+    <input type="number" id="guess" min="1" max="100">
+    <button onclick="submitGuess()">送信</button>
+
+    <!-- 結果を表示 -->
+    <p id="result"></p>
+
+    <!-- Firebase 設定を追加 -->
     <script type="module">
+        // Firebase SDK の読み込み
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-        import { getFirestore } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+        import { getFirestore, collection, addDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
         // Firebase 設定情報
         const firebaseConfig = {
             apiKey: "AIzaSyAeEqhlr7HCAE1rPz_DAcvX8-Z_aC1Qkts",
             authDomain: "numbergame-4b16e.firebaseapp.com",
             projectId: "numbergame-4b16e",
-            storageBucket: "numbergame-4b16e.appspot.com", // 修正済み
+            storageBucket: "numbergame-4b16e.appspot.com",
             messagingSenderId: "119624736783",
             appId: "1:119624736783:web:dae6354d24abfbba92037a",
             measurementId: "G-9856LK71F5"
         };
 
-        // Firebase 初期化
+        // Firebase を初期化
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
 
         console.log("Firebase 初期化完了");
+
+        // ゲームの隠された数字
+        let hiddenNumber = Math.floor(Math.random() * 100) + 1;
+
+        // プレイヤーが数字を推理する関数
+        function guessNumber(playerName, guessedNumber) {
+            const resultElement = document.getElementById("result");
+            if (guessedNumber === hiddenNumber) {
+                resultElement.textContent = `${playerName}さん、おめでとう！ 正解です！`;
+            } else {
+                resultElement.textContent = `${playerName}さん、残念！ 正解は ${hiddenNumber} でした。`;
+            }
+        }
+
+        // プレイヤーが数字を推理したときにFirestoreにデータを保存
+        async function saveGuess(playerName, guessedNumber) {
+            try {
+                const docRef = await addDoc(collection(db, "guesses"), {
+                    player: playerName,
+                    guess: guessedNumber,
+                    timestamp: new Date()
+                });
+                console.log("推理データが保存されました:", docRef.id);
+            } catch (e) {
+                console.error("データ保存エラー:", e);
+            }
+        }
+
+        // Firestore からデータをリアルタイムで取得
+        function listenToGuesses() {
+            const q = collection(db, "guesses");
+            onSnapshot(q, (querySnapshot) => {
+                querySnapshot.forEach((doc) => {
+                    console.log(doc.id, " => ", doc.data());
+                });
+            });
+        }
+
+        // リアルタイムでデータを監視
+        listenToGuesses();
+
+        // 数字を送信する関数
+        function submitGuess() {
+            const playerName = prompt("あなたの名前は？");
+            const guessedNumber = parseInt(document.getElementById("guess").value);
+            if (isNaN(guessedNumber) || guessedNumber < 1 || guessedNumber > 100) {
+                alert("1から100の間で数字を入力してください");
+                return;
+            }
+            saveGuess(playerName, guessedNumber);  // Firestoreに保存
+            guessNumber(playerName, guessedNumber);  // ゲームロジックを実行
+        }
     </script>
-</head>
-<body>
-    <h1>ナンバー推理ゲーム</h1>
-    <p>ルール: 隠された数字を推理して当てよう！</p>
-
-    <!-- ここにゲームのHTMLを追加 -->
-    <!-- 例えば、ゲーム開始ボタンやプレイヤー情報、推測入力欄などを追加します。 -->
-
 </body>
 </html>
