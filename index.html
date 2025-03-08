@@ -4,16 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ナンバー推理ゲーム</title>
-</head>
-<body>
-    <h1>ナンバー推理ゲーム</h1>
-    <p>ルール: 隠された数字を推理して当てよう！</p>
 
-    <!-- ここにゲームのHTMLを追加 -->
-
-    <!-- Firebase 設定を追加 -->
+    <!-- Firebase SDK の読み込み -->
     <script type="module">
-        // Firebase SDK の読み込み
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
         import { getFirestore } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
@@ -28,11 +21,19 @@
             measurementId: "G-9856LK71F5"
         };
 
-        // Firebase を初期化
+        // Firebase 初期化
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
 
         console.log("Firebase 初期化完了");
     </script>
+</head>
+<body>
+    <h1>ナンバー推理ゲーム</h1>
+    <p>ルール: 隠された数字を推理して当てよう！</p>
+
+    <!-- ここにゲームのHTMLを追加 -->
+    <!-- 例えば、ゲーム開始ボタンやプレイヤー情報、推測入力欄などを追加します。 -->
+
 </body>
 </html>
