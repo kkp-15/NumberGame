@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ナンバー推理ゲーム</title>
+</head>
+<body>
+    <h1>ナンバー推理ゲーム</h1>
+    <p>ルール: 隠された数字を推理して当てよう！</p>
+
+    <!-- ここにゲームのHTMLを追加 -->
+
+    <!-- Firebase 設定を追加 -->
+    <script type="module">
+        // Firebase SDK の読み込み
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getFirestore } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+        // Firebase 設定情報
+        const firebaseConfig = {
+            apiKey: "AIzaSyAeEqhlr7HCAE1rPz_DAcvX8-Z_aC1Qkts",
+            authDomain: "numbergame-4b16e.firebaseapp.com",
+            projectId: "numbergame-4b16e",
+            storageBucket: "numbergame-4b16e.appspot.com", // 修正済み
+            messagingSenderId: "119624736783",
+            appId: "1:119624736783:web:dae6354d24abfbba92037a",
+            measurementId: "G-9856LK71F5"
+        };
+
+        // Firebase を初期化
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        console.log("Firebase 初期化完了");
+    </script>
+</body>
+</html>
